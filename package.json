@@ -10,8 +10,17 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "firebase": "^11.1.0",
+    "i": "^0.3.7",
+    "npm": "^11.0.0",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^7.1.1",
+    "recoil": "^0.7.7",
+    "recoil-nexus": "^0.5.1",
+    "short-uuid": "^5.2.0",
+    "styled-components": "^6.1.13",
+    "tldraw": "^3.6.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
