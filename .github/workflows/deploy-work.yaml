@@ -1,0 +1,37 @@
+name: mandalart Deploy
+on:
+  push:
+    branches: [ main ]
+jobs:
+  deploy_next_app:
+    runs-on: ubuntu-latest
+    env:
+      S3_BUCKET: mandalart
+      CF_DISTRIBUTION_ID: E33TFOCZJCDLSK
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@master
+
+      - name: Install Dependencies
+        run: npm install
+      - name: Next Build & Export (generate static html)
+        run: npm run build
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-2
+
+      - name: Delete previous deployed files
+        run: |
+          aws s3 rm --recursive s3://${{ env.S3_BUCKET }}
+      - name: Deploy React.js App
+        run: |
+          aws s3 cp --recursive dist s3://${{ env.S3_BUCKET }}
+      - name: Invalidate cloudfront
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ env.CF_DISTRIBUTION_ID }} \
+            --paths '/*'
