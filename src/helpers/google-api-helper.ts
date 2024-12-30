@@ -3,7 +3,9 @@ import {UserInfo} from "../states/login-state.ts";
 const CLIENT_ID = '119665548039-i87rks0ik12i2jo9jeo2pc1mrv97trdf.apps.googleusercontent.com';
 const API_KEY = 'AIzaSyCscVRLye1LiQ5i44qhXIwPji2B0x2Utcs';
 const DISCOVERY_DOC = 'https://www.googleapis.com/discovery/v1/apis/people/v1/rest';
-const SCOPES = 'https://www.googleapis.com/auth/userinfo.profile';
+const SCOPES =
+  'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email'
+;
 
 // https://developers.google.com/identity/protocols/oauth2?hl=ko
 
@@ -39,8 +41,8 @@ export async function fetchGoogleUser(): Promise<UserInfo> {
     'personFields': 'names,emailAddresses',
   })
   return {
-    name: response.result.names.at(0).displayName,
-    email: response.result.emailAddresses.at(0).value,
+    name: response.result.names?.at(0).displayName,
+    email: response.result.emailAddresses?.at(0).value,
     token: '',
   }
 }

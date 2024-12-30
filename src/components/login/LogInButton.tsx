@@ -3,11 +3,6 @@ import GoogleLogin from "../button/GoogleLogin.tsx";
 
 const S = {
   Container: styled.div`
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 1;
     background-color: white;
     border-radius: 0.5rem;
     border: 1px solid black;

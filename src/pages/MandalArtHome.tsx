@@ -62,11 +62,15 @@ function MandalArtHome() {
 
   const handleOnChange = async (snapshot: string) => {
     updatedSnapshot.current = snapshot
-    await saveMandalArt(mandalartId, pageName.current, updatedSnapshot.current)
+    if (mandalartId !== 'hello-world') {
+      await saveMandalArt(mandalartId, pageName.current, updatedSnapshot.current)
+    }
   }
   const handleOnNameChange = async (name: string) => {
     pageName.current = name
-    await saveMandalArt(mandalartId, pageName.current, updatedSnapshot.current)
+    if (mandalartId !== 'hello-world') {
+      await saveMandalArt(mandalartId, pageName.current, updatedSnapshot.current)
+    }
   }
 
   if(!mandalartId) return <></>

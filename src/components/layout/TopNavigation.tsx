@@ -9,14 +9,22 @@ const S = {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding: 0.5rem 1rem;
+    border-bottom: 1px solid #999999;
   `,
   Logo: styled.div`
     font-weight: bold;
     font-size: 1rem;
     padding: 0.5rem;
-    border-bottom: 2px solid black;
   `,
-  LogInOut: styled.div``
+  LogInOut: styled.div`
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+    &:hover {
+      background-color: #66666620;
+    }
+  `
 };
 
 function TopNavigation() {

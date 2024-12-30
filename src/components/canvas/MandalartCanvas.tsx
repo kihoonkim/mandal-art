@@ -47,14 +47,18 @@ function MandalartCanvas({ mandalartId, pageName, editable, initialSnapshot, onC
       animation: { duration: 1000 },
     })
 
-    const unlisten = editor.store.listen(debounce(() => {
-        const { document, session } = getSnapshot(editor.store)
-        onChange(JSON.stringify({ document, session }))
-      }, 100),
+    const unlisten = editor.store.listen(debounce(updateSnapshot, 100),
       { scope: 'document', source: 'user' }
     )
 
     return () => unlisten();
+  }
+
+  const updateSnapshot = () => {
+    if (!editorRef.current) return
+
+    const { document, session } = getSnapshot(editorRef.current.store)
+    onChange(JSON.stringify({ document, session }))
   }
 
   const handleUiEvent = debounce((event: string) => {
@@ -68,7 +72,9 @@ function MandalartCanvas({ mandalartId, pageName, editable, initialSnapshot, onC
     if(!editable) return
     if(!editorRef.current) return
     editorRef.current.createShapes(buildMandalartShape())
+    updateSnapshot()
   }
+
   const components: TLComponents = {
     DebugMenu: null,
     HelpMenu: null,
@@ -77,7 +83,7 @@ function MandalartCanvas({ mandalartId, pageName, editable, initialSnapshot, onC
     Toolbar: CustomToolbar,
   }
   const options = {
-    maxPages: 2,
+    maxPages: mandalartId === 'hello-world' ? 1 : 2,
   }
   return (
     <S.Container>
