@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import {getSnapshot, loadSnapshot, TLComponents, Tldraw} from "tldraw";
+import {debounce, getSnapshot, loadSnapshot, TLComponents, Tldraw} from "tldraw";
 import {useEffect, useRef} from "react";
 import {Editor} from "@tldraw/editor";
 import CustomMainMenu from "./CustomMainMenu.tsx";
@@ -36,7 +36,7 @@ function MandalartCanvas({ mandalartId, pageName, editable, initialSnapshot, onC
     editor.updateInstanceState({ isReadonly: !editable })
 
     if (!initialSnapshot) {
-      editorRef.current.updatePage({ id: editorRef.current.getCurrentPageId(), name:  pageName })
+      editorRef.current.updatePage({ id: editorRef.current.getCurrentPageId(), name:  pageName || 'Mandalart' })
       initMandalartBoard()
     }
     else {
@@ -47,24 +47,22 @@ function MandalartCanvas({ mandalartId, pageName, editable, initialSnapshot, onC
       animation: { duration: 1000 },
     })
 
-    const unlisten = editor.store.listen(() => {
-      console.log("????")
+    const unlisten = editor.store.listen(debounce(() => {
         const { document, session } = getSnapshot(editor.store)
         onChange(JSON.stringify({ document, session }))
-      },
+      }, 100),
       { scope: 'document', source: 'user' }
     )
-    //
 
     return () => unlisten();
   }
 
-  const handleUiEvent = (event: string) => {
+  const handleUiEvent = debounce((event: string) => {
     if(!editorRef.current) return
     if (event === 'rename-page') {
       onPageNameChange(editorRef.current.getCurrentPage().name)
     }
-  }
+  }, 100)
 
   const initMandalartBoard = () => {
     if(!editable) return
